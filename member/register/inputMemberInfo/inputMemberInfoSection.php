@@ -1,5 +1,5 @@
 <?php 
-include 'inputMemberInfoService.php';
+require 'inputMemberInfoService.php';
 ?>
 
 <div id="container" class="container-full">
@@ -145,9 +145,8 @@ include 'inputMemberInfoService.php';
         $("#regSubmitBtn").on("click",function(){
             var member = new Member();
             member.setName($("#name").val());
-            member.id = $("#name").val();
+            member.setId($("#id").val());
 
-            alert(member.name);
         })
 
         
@@ -170,11 +169,28 @@ include 'inputMemberInfoService.php';
             this.name = name;
         }
 
-        setId(){
-           return alert("w");
+        setId(id){
+			idDuplicationChecker(id);
         }
     }
 
+	// function idDuplicationChecker(id){
+
+	// 	$.ajax({
+	// 		url: 'register/inputMemberInfo/inputMemberInfoService.php'
+	// 		,type: 'POST'
+	// 		,data: {
+	// 			'action': "idDupCheck"
+	// 			,'id' : id
+	// 		}
+	// 		,success: function(){
+	// 			alert("인증번호가 발송되었습니다.");
+	// 		}
+	// 		,error: function(){
+	// 			alert("인증번호 발송에 실패했습니다.");
+	// 		}
+	// 	});
+	// }
 
     function phoneNumberFiller(mobileNumber){
         var numArr = phoneNumberSlicer(mobileNumber)
