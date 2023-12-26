@@ -1,41 +1,55 @@
 <?php
     class DbConnect {
-        $host = "host.docker.internal";
-        $user = "root";
-        $password = "0000";
-        $dbName = "hrdtest";
-        $port = 3306;
-    
-        $conn = new mysqli($host,$user,$password);
-        if(!$conn){
-            echo "could not connected";
-            die("could not connected" . $conn->connect_error);
+        protected $host = "host.docker.internal";
+        protected $user = "root";
+        protected $password = "0000";
+        protected $dbName = "hrdtest";
+        protected $port = 3306;
+        public $conn;
+
+        function __construct(){
+            $this->conn = new mysqli($this->host,$this->user,$this->password,$this->dbName);
+            if($this->conn->connect_error){
+                echo "could not connected";
+                die("could not connected" . $this->conn->connect_error);
+            }
+            $this->checkOrCreateDb();
+            $this->checkOrCreateTable();
         }
     
-        if(!$conn->select_db($dbName)){
-            $sql = "CREATE DATABASE `$dbName`;";
-            if($conn->query($sql)===true){
-                echo "db created";
-            } else {
-                echo "db could not created".$conn->error;
+        private function checkOrCreateDb(){
+            if(!$this->conn->select_db($this->dbName)){
+                $sql = "CREATE DATABASE `$this->dbName`;";
+                if($this->conn->query($sql)===true){
+                    echo "db created";
+                } else {
+                    echo "db could not created".$this->conn->error;
+                }
+            }
+            $this->conn->select_db($this->dbName);
+        }
+    
+        private function checkOrCreateTable(){
+            $tableName = "member";
+            $sql = "DESC `$tableName`;";
+            $result = $this->conn->query($sql);
+            if($result == false){
+                $this->createMemberTable();
             }
         }
-    
-        $sql = "USE '$dbName';";
-        $tableName = "member";
-        $sql = "DESC `$tableName`;";
-        $memberTableExistCheck = $conn->query($sql);
-        $tableResult = mysqli_fetch_all($memberTableExistCheck, MYSQLI_ASSOC);
-    
-        if($tableResult==null){
-            createMemberTable($conn);
-        }
-    
-        function createMemberTable($conn){
-            $scriptPath = '../db/member.sql';
+        
+        private function createMemberTable(){
+            $scriptPath = '/home/web/frontend/db/member.sql';
             $sqlScript = file_get_contents($scriptPath);
-            $conn->query($sqlScript);
+            if($this->conn->multi_query($sqlScript)===true){
+                echo "Table Created";
+            } else {
+                echo "Error Creating table" . $this->conn->error;
+            }
         }
-        mysqli_close($conn);
+
+        function __desctruct(){
+            $this->conn->close();
+        }
     }
 ?>

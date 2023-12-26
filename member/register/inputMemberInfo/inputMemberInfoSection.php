@@ -25,7 +25,7 @@ require 'inputMemberInfoService.php';
 						</tr>
 						<tr>
 							<th scope="col"><span class="icons">*</span>아이디</th>
-							<td><input id="id" type="text" class="input-text" style="width:302px" placeholder="영문자로 시작하는 4~15자의 영문소문자, 숫자"><a href="#" class="btn-s-tin ml10">중복확인</a></td>
+							<td><input id="id" type="text" class="input-text" style="width:302px" placeholder="영문자로 시작하는 4~15자의 영문소문자, 숫자"><a id="idCheckBtn" href="#" class="btn-s-tin ml10">중복확인</a></td>
 						</tr>
 						<tr>
 							<th scope="col"><span class="icons">*</span>비밀번호</th>
@@ -38,9 +38,9 @@ require 'inputMemberInfoService.php';
 						<tr>
 							<th scope="col"><span class="icons">*</span>이메일주소</th>
 							<td>
-								<input id="email" type="text" class="input-text" style="width:138px"> @ <input type="text" class="input-text" style="width:138px">
-								<select id="emailDomain" class="input-sel" style="width:160px">
-									<option value="">선택입력</option>
+								<input id="email" type="text" class="input-text" style="width:138px"> @ <input id="emailDomain" type="text" class="input-text" style="width:138px">
+								<select id="emailDomainSelect" class="input-sel" style="width:160px">
+									<option value="manual">선택입력</option>
 									<option value="gmail.com">gmail.com</option>
 									<option value="naver.com">naver.com</option>
 									<option value="kakao.com">kakao.com</option>
@@ -117,6 +117,7 @@ require 'inputMemberInfoService.php';
     </div>  
 </div>
 
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js">
 
 <script>
     $(document).ready(function(){
@@ -146,11 +147,23 @@ require 'inputMemberInfoService.php';
             var member = new Member();
             member.setName($("#name").val());
             member.setId($("#id").val());
-
         })
 
-        
+		$("#idCheckBtn").on("click",function(){
+			var id = $("#id").val();
+			if(id==""){
+				return;
+			}
+			var result = idDuplicationChecker(id);
+			if(!result){
+				alert("사용 가능한 ID입니다.");
+			} else {
+				alert("이미 사용중인 ID입니다.");
+			}
+		})
 
+		emailDomainSplit();
+		emailDomainSelector();
 
     })
 
@@ -170,27 +183,53 @@ require 'inputMemberInfoService.php';
         }
 
         setId(id){
-			idDuplicationChecker(id);
+			idDuplicationChecker("123");
         }
     }
 
-	// function idDuplicationChecker(id){
+	function idDuplicationChecker(id){
+		var duplicated;
+		$.ajax({
+			url: 'register/inputMemberInfo/inputMemberInfoService.php'
+			,type: 'POST'
+			,data: {
+				'action': "idcheck"
+				,'id' : id
+			}
+			,success: function(result){
+				if(result=="available"){
+					duplicated=false;
+				} else {
+					duplicated=true;
+				}
+			}
+			,error: function(){
+				duplicated=true;
+			}
+		});
+	}
 
-	// 	$.ajax({
-	// 		url: 'register/inputMemberInfo/inputMemberInfoService.php'
-	// 		,type: 'POST'
-	// 		,data: {
-	// 			'action': "idDupCheck"
-	// 			,'id' : id
-	// 		}
-	// 		,success: function(){
-	// 			alert("인증번호가 발송되었습니다.");
-	// 		}
-	// 		,error: function(){
-	// 			alert("인증번호 발송에 실패했습니다.");
-	// 		}
-	// 	});
-	// }
+	function emailDomainSplit(){
+		$("#email").on("change",function(){
+			var email = $(this).val();
+			if(email.includes("@")){
+				var partsArr = email.split("@");
+				$(this).val(partsArr[0]);
+				$("#emailDomain").val(partsArr[1]);
+				$("#emailDomainSelect").val("manual");
+			}
+		})
+	}
+
+	function emailDomainSelector(){
+		$("#emailDomainSelect").on("change",function(){
+			var selected = $(this).val();
+			if(selected!="manual"){
+				$("#emailDomain").val(selected);
+			}
+		})
+	}
+
 
     function phoneNumberFiller(mobileNumber){
         var numArr = phoneNumberSlicer(mobileNumber)

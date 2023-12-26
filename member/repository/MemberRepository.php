@@ -1,14 +1,21 @@
-<?php 
- require_once "../../../db/DBConnect.php";
+<?php
+require_once '/home/web/frontend/db/DBConnect.php';
+
+
 
  class MemberDB extends DbConnect{
 
-    $tableName = 'member';
+    protected $tableName = 'member';
 
     function findById($id){
-        $query = "SELECT * FROM $tableName WHERE `id`=$id;";
-        $result = $conn->query($query);
+        $query = "SELECT * FROM $this->tableName WHERE `id`=$id;";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("i",$id);
+        $stmt->execute();
+        $result = $stmt->get_result();
         return $result->num_rows;
     }
  }
+
+
 ?>

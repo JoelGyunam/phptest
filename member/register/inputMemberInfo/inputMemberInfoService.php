@@ -1,16 +1,19 @@
-<?php 
-require_once "../../repository/MemberRepository.php";
-
-// id 중복 확인
+<?php
+require_once '/home/web/frontend/member/repository/MemberRepository.php';
 
 $memberDb = new MemberDB();
 
-if($_SERVER['REQUEST_METHOD']=='POST'){
-    $action = $_POST[`action`]??'';
+if ($_SERVER['REQUEST_METHOD']=='POST'){
+    $action = $_POST['action'] ?? '';
     switch($action){
-        case 'idDupCheck' :
-            $id = $_POST['id']??'';
-            $idRowCount = findById($id);
+        case "idcheck" :
+            $id = $_POST['id'] ?? '';
+            $idRowCount = $memberDb->findById($id);
+            if($idRowCount==0){
+                echo "available";
+            } else {
+                echo "unavailable";
+            }
             break;
         default :
             echo "잘못된 요청";
@@ -19,4 +22,5 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 } else {
     echo "잘못된 http method";
 }
+
 ?>
