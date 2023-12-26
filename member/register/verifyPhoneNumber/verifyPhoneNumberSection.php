@@ -1,7 +1,7 @@
 <div id="container" class="container-full">
     <div id="content" class="content">
         <div class="inner">
-            <?php include '..\registerLnb\registerHeader.php'?>
+            <?php include getenv('BASE_PATH').'/member/register/registerLnb/registerHeader.php'?>
             
             <div class="tit-box-h4">
 				<h3 class="tit-h4">본인인증</h3>

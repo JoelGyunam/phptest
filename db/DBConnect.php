@@ -1,16 +1,17 @@
 <?php
     class DbConnect {
-        protected $host = "host.docker.internal";
-        protected $user = "root";
+        protected $host;
+        protected $user;
         protected $password = "0000";
         protected $dbName = "hrdtest";
         protected $port = 3306;
         public $conn;
 
         function __construct(){
-            $this->conn = new mysqli($this->host,$this->user,$this->password,$this->dbName);
+            $this->host = getenv('DOCKER_ENV') ? "host.docker.internal" : "localhost";
+            $this->user = getenv('DOCKER_ENV') ? "root" : "localroot";
+            $this->conn = new mysqli($this->host,$this->user,$this->password);
             if($this->conn->connect_error){
-                echo "could not connected";
                 die("could not connected" . $this->conn->connect_error);
             }
             $this->checkOrCreateDb();
@@ -18,28 +19,30 @@
         }
     
         private function checkOrCreateDb(){
-            if(!$this->conn->select_db($this->dbName)){
-                $sql = "CREATE DATABASE `$this->dbName`;";
+            $dbExists = $this->conn->query("SHOW DATABASES LIKE '$this->dbName';");
+            if($dbExists && $dbExists->num_rows == 0){
+                $sql = "CREATE DATABASE IF NOT EXISTS `$this->dbName`;";
                 if($this->conn->query($sql)===true){
-                    echo "db created";
-                } else {
-                    echo "db could not created".$this->conn->error;
+                    $this->conn->select_db($this->dbName);
+                } else{
+                    error_log("DB is not existed").$this->conn->error;
                 }
+            } else {
+                $this->conn->select_db($this->dbName);
             }
-            $this->conn->select_db($this->dbName);
         }
     
         private function checkOrCreateTable(){
             $tableName = "member";
-            $sql = "DESC `$tableName`;";
+            $sql = "SHOW TABLES LIKE '$tableName';";
             $result = $this->conn->query($sql);
-            if($result == false){
+            if($result == false || $result->num_rows == 0){
                 $this->createMemberTable();
             }
         }
         
         private function createMemberTable(){
-            $scriptPath = '/home/web/frontend/db/member.sql';
+            $scriptPath = getenv('BASE_PATH').'/db/member.sql';
             $sqlScript = file_get_contents($scriptPath);
             if($this->conn->multi_query($sqlScript)===true){
                 echo "Table Created";
@@ -48,7 +51,7 @@
             }
         }
 
-        function __desctruct(){
+        function __destruct(){
             $this->conn->close();
         }
     }

@@ -26,3 +26,12 @@
 <script type="text/javascript" src="http://q.hackershrd.com/worksheet/js/ui.js"></script>
 <!--[if lte IE 9]> <script src="/js/common/place_holder.js"></script> <![endif]-->
 </head>
+
+<?php 
+if (strpos(__DIR__, '/home') === 0) {
+    $basePath = '/home/web/frontend';
+} elseif (strpos(__DIR__, 'C:\Users') === 0) {
+    $basePath = 'C://Users/gynpa/Documents/projects/hackersPersonal/frontend';
+}
+putenv("BASE_PATH=$basePath");
+?>

@@ -1,5 +1,6 @@
 <?php 
-    include_once '../domain/terms/TermsDocument.php';
+    require_once(getenv('BASE_PATH').'/domain/terms/TermsDocument.php');
+
     $document = new Document($sort);
     $termsTitle = $document->getTitle();
     $isOptional = $document->getIsOptional();

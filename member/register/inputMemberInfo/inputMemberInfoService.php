@@ -1,5 +1,8 @@
 <?php
-require_once '/home/web/frontend/member/repository/MemberRepository.php';
+// require_once '/home/web/frontend/member/repository/MemberRepository.php';
+// require_once(__DIR__ . '/../../repository/MemberRepository.php');
+// require_once($_SERVER['DOCUMENT_ROOT'] . '/frontend/member/repository/MemberRepository.php');
+require_once getenv('BASE_PATH').'/member/repository/MemberRepository.php';
 
 $memberDb = new MemberDB();
 

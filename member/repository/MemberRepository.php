@@ -1,7 +1,6 @@
 <?php
-require_once '/home/web/frontend/db/DBConnect.php';
-
-
+// require_once '/home/web/frontend/db/DBConnect.php';
+require_once(getenv('BASE_PATH').'/db/DBConnect.php');
 
  class MemberDB extends DbConnect{
 

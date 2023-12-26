@@ -1,7 +1,8 @@
 <div id="container" class="container-full">
     <div id="content" class="content">
         <div class="inner">
-            <?php include '..\registerLnb\registerHeader.php';?>
+            <?php require_once(getenv('BASE_PATH').'/member/register/registerLnb/registerHeader.php');?>
+
             <?php 
                 $sort = "termsOfUse";
                 include 'termsSection.php';

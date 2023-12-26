@@ -1,12 +1,14 @@
 <?php 
-require 'inputMemberInfoService.php';
+// require 'inputMemberInfoService.php';
+require_once(getenv('BASE_PATH').'/member/register/inputMemberInfo/inputMemberInfoService.php');?>
 ?>
 
 <div id="container" class="container-full">
     <div id="content" class="content">
         <div class="inner">
-            <?php include '..\registerLnb\registerHeader.php'?>
-            
+            <?php // include '..\registerLnb\registerHeader.php'?>
+			<?php require_once(getenv('BASE_PATH').'/member/register/registerLnb/registerHeader.php');?>
+
             <div class="tit-box-h4">
 				<h3 class="tit-h4">본인인증</h3>
 			</div>
@@ -117,7 +119,6 @@ require 'inputMemberInfoService.php';
     </div>  
 </div>
 
-<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js">
 
 <script>
     $(document).ready(function(){
@@ -154,27 +155,30 @@ require 'inputMemberInfoService.php';
 			if(id==""){
 				return;
 			}
-			var result = idDuplicationChecker(id);
-			if(!result){
-				alert("사용 가능한 ID입니다.");
-			} else {
-				alert("이미 사용중인 ID입니다.");
-			}
+			idDuplicationChecker(id, function(isDuplicated) {
+				console.log(isDuplicated);
+				if(!isDuplicated){
+					alert("사용 가능한 ID입니다.");
+				} else {
+					alert("이미 사용중인 ID입니다.");
+				}
+			});
 		})
 
 		emailDomainSplit();
 		emailDomainSelector();
 
-		$("#findAddressBtn").on("click",function(){
-			e.preventDefault();
-			new daum.Postcode({
-				oncomplete: function(data){
-					$("#postalCode").val(data.zonecode);
-					$("#address").val(data.address);
-					$("#additionalAddress").focus();
-				}
-			}).open();
-		})
+		// $("#findAddressBtn").on("click",function(){
+		// 	e.preventDefault();
+		// 	new daum.Postcode({
+		// 		oncomplete: function(data){
+		// 			$("#postalCode").val(data.zonecode);
+		// 			$("#address").val(data.address);
+		// 			$("#additionalAddress").focus();
+		// 		}
+		// 	}).open();
+		// })
+	});
 
     class Member{
         constructor(){
@@ -192,12 +196,11 @@ require 'inputMemberInfoService.php';
         }
 
         setId(id){
-			idDuplicationChecker("123");
+			idDuplicationChecker("1");
         }
     }
 
-	function idDuplicationChecker(id){
-		var duplicated;
+	function idDuplicationChecker(id, callback){
 		$.ajax({
 			url: 'register/inputMemberInfo/inputMemberInfoService.php'
 			,type: 'POST'
@@ -206,14 +209,15 @@ require 'inputMemberInfoService.php';
 				,'id' : id
 			}
 			,success: function(result){
+				console.log(result);
 				if(result=="available"){
-					duplicated=false;
+					callback(false);
 				} else {
-					duplicated=true;
+					callback(true);
 				}
 			}
 			,error: function(){
-				duplicated=true;
+				callback(true);
 			}
 		});
 	}
@@ -260,3 +264,4 @@ require 'inputMemberInfoService.php';
     }
 
 </script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js">

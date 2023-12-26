@@ -3,15 +3,18 @@
 <!--[if (IE 7)]><html class="no-js ie7" xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko" lang="ko"><![endif]-->
 <!--[if (IE 8)]><html class="no-js ie8" xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko" lang="ko"><![endif]-->
 
-    <?php include '../gnb/headData.php';
+    <?php
+    require '../gnb/headData.php';
     session_start();
     ?>
     <body>
-        <?php include '../gnb/skipnav.php' ?>
+        <?php include getenv('BASE_PATH').'/gnb/skipnav.php' ?>
         <div id="wrap">
-            <?php include '../gnb/header.php' ?>
-            <?php include 'termsAgree/termsContainer.php' ?>
-            <?php include '../gnb/footer.php' ?>
+            <?php
+            include getenv('BASE_PATH').'/gnb/header.php';
+            include getenv('BASE_PATH').'/member/register/termsAgree/termsContainer.php';
+            include getenv('BASE_PATH').'/gnb/footer.php'
+            ?>
         </div>
     </body>
 </html>
