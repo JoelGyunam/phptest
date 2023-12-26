@@ -30,8 +30,10 @@
 <?php 
 if (strpos(__DIR__, '/home') === 0) {
     $basePath = '/home/web/frontend';
-} elseif (strpos(__DIR__, 'C:\Users') === 0) {
+} elseif (strpos(__DIR__, 'C:\Users\gynpa') === 0) {
     $basePath = 'C://Users/gynpa/Documents/projects/hackersPersonal/frontend';
+} elseif (strpos(__DIR__, 'C:\web\frontend') === 0){
+    $basePath = 'c://web/frontend';
 }
 putenv("BASE_PATH=$basePath");
 ?>
