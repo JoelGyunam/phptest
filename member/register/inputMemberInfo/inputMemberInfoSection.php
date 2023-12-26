@@ -63,7 +63,7 @@ require 'inputMemberInfoService.php';
 							<th scope="col"><span class="icons">*</span>주소</th>
 							<td>
 								<p>
-									<label>우편번호 <input id="postalCode" type="text" class="input-text ml5" style="width:242px" disabled=""></label><a href="#" class="btn-s-tin ml10">주소찾기</a>
+									<label>우편번호 <input id="postalCode" type="text" class="input-text ml5" style="width:242px" disabled=""></label><a id="findAddressBtn" href="#" class="btn-s-tin ml10">주소찾기</a>
 								</p>
 								<p class="mt10">
 									<label>기본주소 <input id="address" type="text" class="input-text ml5" style="width:719px"></label>
@@ -165,7 +165,16 @@ require 'inputMemberInfoService.php';
 		emailDomainSplit();
 		emailDomainSelector();
 
-    })
+		$("#findAddressBtn").on("click",function(){
+			e.preventDefault();
+			new daum.Postcode({
+				oncomplete: function(data){
+					$("#postalCode").val(data.zonecode);
+					$("#address").val(data.address);
+					$("#additionalAddress").focus();
+				}
+			}).open();
+		})
 
     class Member{
         constructor(){
