@@ -128,7 +128,18 @@
 				alert(validCheck);
 			} else {
 				$.ajax({
-					
+					url: 'register/s4_registerConfirmed/service/registerConfirmedService.php'
+					,type: 'POST'
+					,data: {
+						'action': "newMember"
+						,'member' : member
+					}
+					,success: function(result){
+						console.log(result)
+					}
+					,error: function(){
+						console.log("오류")
+					}
 				})
 			}
         })

@@ -19,6 +19,10 @@ switch ($mode) {
         include $_SERVER["DOCUMENT_ROOT"].'/member/register/s3_inputMemberInfo/view/step_03.php';
         break;
     
+    case 'regist':
+        include $_SERVER["DOCUMENT_ROOT"].'/member/register/s4_registerConfirmed/service/registerConfirmedService.php';
+        break;
+
     case 'complete':
         // 회원가입 완료 관련 코드
         include $_SERVER["DOCUMENT_ROOT"].'/member/steps/complete.php';
