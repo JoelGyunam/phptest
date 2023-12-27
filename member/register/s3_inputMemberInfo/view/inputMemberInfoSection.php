@@ -1,7 +1,6 @@
 <div id="container" class="container-full">
     <div id="content" class="content">
         <div class="inner">
-            <?php // include '..\registerLnb\registerHeader.php'?>
 			<?php require_once(getenv('BASE_PATH').'/member/register/registerLnb/registerHeader.php');?>
 
             <div class="tit-box-h4">
@@ -22,7 +21,7 @@
 						</tr>
 						<tr>
 							<th scope="col"><span class="icons">*</span>아이디</th>
-							<td><input id="id" type="text" class="input-text" style="width:302px" placeholder="영문자로 시작하는 4~15자의 영문소문자, 숫자"><a id="idCheckBtn" href="#" class="btn-s-tin ml10">중복확인</a></td>
+							<td><input id="id" type="text" class="input-text" style="width:302px" placeholder="영문자로 시작하는 4~15자의 영문소문자, 숫자"><a id="idCheckBtn" onmouseover="hoverEffect(this)" onmouseout="normalCursor(this)" class="btn-s-tin ml10">중복확인</a></td>
 						</tr>
 						<tr>
 							<th scope="col"><span class="icons">*</span>비밀번호</th>
@@ -54,16 +53,16 @@
 						</tr>
 						<tr>
 							<th scope="col"><span class="icons"></span>일반전화 번호</th>
-							<td><input id="telNumberBegin" type="text" class="input-text" style="width:88px"> - <input id="telNumberCenter" type="text" class="input-text" style="width:88px"> - <input id="telNumBerLast" type="text" class="input-text" style="width:88px"></td>
+							<td><input id="telNumberBegin" type="text" class="input-text" style="width:88px" maxlength="3"> - <input id="telNumberCenter" type="text" class="input-text" style="width:88px" maxlength="4"> - <input id="telNumBerLast" type="text" class="input-text" style="width:88px" maxlength="4"></td>
 						</tr>
 						<tr>
 							<th scope="col"><span class="icons">*</span>주소</th>
 							<td>
 								<p>
-									<label>우편번호 <input id="postalCode" type="text" class="input-text ml5" style="width:242px" disabled=""></label><a id="findAddressBtn" onclick="execDaumPostcode()" href="#" class="btn-s-tin ml10">주소찾기</a>
+									<label>우편번호 <input id="postalCode" type="text" class="input-text ml5" style="width:242px" disabled></label><a id="findAddressBtn" class="btn-s-tin ml10" onclick="execDaumPostcode()" onmouseover="hoverEffect(this)" onmouseout="normalCursor(this)">주소찾기</a>
 								</p>
 								<p class="mt10">
-									<label>기본주소 <input id="address" type="text" class="input-text ml5" style="width:719px"></label>
+									<label>기본주소 <input id="address" type="text" class="input-text ml5" style="width:719px" disabled></label>
 								</p>
 								<p class="mt10">
 									<label>상세주소 <input id="additionalAddress" type="text" class="input-text ml5" style="width:719px"></label>
@@ -75,7 +74,7 @@
 							<td>
 								<div class="box-input">
 									<label class="input-sp">
-										<input id="smsAgreed" id="smsAgreed" type="radio" name="radio" checked="checked">
+										<input id="smsAgreed" type="radio" name="radio" checked="checked">
 										<span class="input-txt">수신함</span>
 									</label>
 									<label class="input-sp">
@@ -106,7 +105,7 @@
 				</table>
 
 				<div id="regSubmitBtn" class="box-btn">
-					<a class="btn-l">회원가입</a>
+					<a class="btn-l" onmouseover="hoverEffect(this)" onmouseout="normalCursor(this)">회원가입</a>
 				</div>
 			</div>
 
@@ -116,32 +115,22 @@
 
 
 <script>
+	var idDuplicateChecked = false;
     $(document).ready(function(){
-        
+		var member = new Member();
         phoneNumberFiller("<?php echo $_SESSION['phoneNumber']?>");
-        let member = new Member();
-        member.mobileNumber = "<?php echo $_SESSION['phoneNumber']?>";
-
-        //      회원가입 3단계(회원정보입력)
-        //     - 필수항목 : * 화된 모든 개인정보
-        //     - 아이디  중복체크기능 추가할것
-        //     - 우편번호 찾기 다음 API활용
-        //     - 2단계에 입력받은 휴대폰 번호는 재입력 하지 않도록 디폴트 세팅할것(인증용으로 사용된 정보는 수정불가임을 확인)
-        //     - /member/index.php?mode=step_03
-
-        //     회원가입 처리단계
-        //     - 넘어온 항목 유효성 체크할것(필수정보, 중복처리유무 등등)
-        //     - 비밀번호는 sha256 암호화처리
-        //     - /member/index.php?mode=regist
-
-        //     회원가입완료
-        //     - 로그인이 되어있지 않은 상태이며 로그인 버튼 클릭시 로그인 페이지로 이동
-        //     - /member/index.php?mode=complete
 
         $("#regSubmitBtn").on("click",function(){
-            var member = new Member();
-            member.setName($("#name").val());
-            member.setId($("#id").val());
+            member.setMember();
+			console.log(member);
+			var validCheck = member.isValid();
+			if(validCheck!="valid"){
+				alert(validCheck);
+			} else {
+				$.ajax({
+					
+				})
+			}
         })
 
 		$("#idCheckBtn").on("click",function(){
@@ -150,60 +139,97 @@
 				return;
 			}
 			idDuplicationChecker(id, function(isDuplicated) {
-				console.log(isDuplicated);
 				if(!isDuplicated){
 					alert("사용 가능한 ID입니다.");
+					idDuplicateChecked = true;
 				} else {
 					alert("이미 사용중인 ID입니다.");
+					idDuplicateChecked = false;
 				}
 			});
 		})
-
 		emailDomainSplit();
 		emailDomainSelector();
-
-		// $("#findAddressBtn").on("click",function(){
-		// 	e.preventDefault();
-		// 	new daum.Postcode({
-		// 		oncomplete: function(data){
-		// 			$("#postalCode").val(data.zonecode);
-		// 			$("#address").val(data.address);
-		// 			$("#additionalAddress").focus();
-		// 		}
-		// 	}).open();
-		// })
 	});
 
     class Member{
-        constructor(){
-            this.name = null;
-            this.id = null;
-            this.idDuplicationCheck = null;
-            this.password = null;
-            this.email = null;
-            this.mobileNumber = null;
-            this.telNumber = null;
+        setMember(){
+            this.name = $("#name").val();
+            this.id = $("#id").val();
+			this.idDuplicateChecked = idDuplicateChecked;
+            this.pw = $("#pw").val();
+			this.pwConfirm = $("#pwConfirm").val();
+            this.email = emailMerger();
+            this.mobileNumber = "<?php echo $_SESSION['phoneNumber']?>";
+            this.telNumber = telNumberMerger();
+			this.postalCode = $("#postalCode").val();
+			this.address = $("#address").val();
+			this.additionalAddress = $("#additionalAddress").val();
+			this.smsAgreed = $("#smsAgreed").is(":checked");
+			this.mailAgreed = $("#mailAgreed").is(":checked");
         }
 
-        setName(name){
-            this.name = name;
-        }
-
-        setId(id){
-			idDuplicationChecker("1");
-        }
+		isValid(){
+			if(this.name=="" || this.name==null){
+				return "이름을 입력해 주세요.";
+			}
+			if(this.id=="" || this.id==null){
+				return "아이디를 입력해 주세요.";
+			}
+			if(!this.idDuplicateChecked){
+				return "아이디 중복확인을 해주세요.";
+			}
+			if(!pwValidChecker(this.pw)){
+				return "사용할 수 없는 비밀번호 형식입니다.";
+			}
+			if(this.pw!=this.pwConfirm){
+				return "비밀번호가 일치하지 않습니다.";
+			}
+			if(this.email=="" || this.email==null){
+				return "이메일을 입력해 주세요.";
+			}
+			if(this.address=="" || this.address==null){
+				return "주소를 입력해 주세요.";
+			}
+			if(this.additionalAddress=="" || this.additionalAddress==null){
+				return "상세주소를 입력해 주세요.";
+			}
+			if(this.smsAgreed=="" || this.smsAgreed==null){
+				return "SMS수신 여부를 선택해 주세요.";
+			}
+			if(this.mailAgreed=="" || this.mailAgreed==null){
+				return "메일수신 여부를 선택해 주세요.";
+			} else {
+				return "valid";
+			}
+		}
     }
 
+	function pwValidChecker(pw){
+		var regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/;
+		return regex.test(pw);
+	}
+
+	function idValidChecker(id){
+		var regex = /^[a-z][a-z0-9]{3,14}$/;
+		return regex.test(id);
+	}
+
 	function idDuplicationChecker(id, callback){
+
+		if(!idValidChecker(id)){
+			alert("아이디 형식을 확인해 주세요.");
+			return;
+		}
+
 		$.ajax({
-			url: 'register/inputMemberInfo/inputMemberInfoService.php'
+			url: 'register/s3_inputMemberInfo/service/inputMemberInfoService.php'
 			,type: 'POST'
 			,data: {
 				'action': "idcheck"
 				,'id' : id
 			}
 			,success: function(result){
-				console.log(result);
 				if(result=="available"){
 					callback(false);
 				} else {
@@ -236,7 +262,12 @@
 			}
 		})
 	}
-
+	
+	function emailMerger(){
+		if($("#email").val()!="" && $("#emailDomain").val()!=""){
+			return $("#email").val()+"@"+$("#emailDomain").val();
+		}
+	}
 
     function phoneNumberFiller(mobileNumber){
         var numArr = phoneNumberSlicer(mobileNumber)
@@ -256,6 +287,20 @@
         numArr[2] = mobileNumber.slice(7,11);
         return numArr;
     }
+
+	function telNumberMerger(){
+		if($("#telNumberBegin").val()!="" && $("#telNumberCenter").val()!="" && $("#telNumBerLast").val()!=""){
+			return ""+$("#telNumberBegin").val()+$("#telNumberCenter").val()+$("#telNumBerLast").val();
+		}
+	}
+
+	function hoverEffect(element) {
+		element.style.cursor = 'pointer';
+	}
+
+	function normalCursor(element) {
+		element.style.cursor = 'default';
+	}
 
 </script>
 <!-- <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script> -->

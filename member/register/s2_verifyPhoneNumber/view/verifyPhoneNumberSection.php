@@ -38,7 +38,7 @@
             var mobileNumber = $("#mobileNumberBegin").val()+$("#mobileNumberCenter").val()+$("#mobileNumberLast").val();
             if(validateMobileNumber(mobileNumber)){
                 $.ajax({
-                    url: 'register/verifyPhoneNumber/phoneCodeService.php'
+                    url: 'register/s2_verifyPhoneNumber/service/phoneCodeService.php'
                     ,type: 'POST'
                     ,data: {
                         'action': "generateCode"
@@ -65,7 +65,7 @@
             } 
 
             $.ajax({
-                url: 'register/verifyPhoneNumber/phoneCodeService.php'
+                url: 'register/s2_verifyPhoneNumber/service/phoneCodeService.php'
                 ,type: 'POST'
                 ,data: {
                     'action': "verifyCode"

@@ -12,7 +12,7 @@
         <div id="wrap">
             <?php
             include $_SERVER["DOCUMENT_ROOT"].'/gnb/header.php';
-            include $_SERVER["DOCUMENT_ROOT"].'/member/register/inputMemberInfo/inputMemberInfoSection.php';
+            include $_SERVER["DOCUMENT_ROOT"].'/member/register/s1_termsAgree/view/termsContainer.php';
             include $_SERVER["DOCUMENT_ROOT"].'/gnb/footer.php'
             ?>
         </div>
