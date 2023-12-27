@@ -194,10 +194,10 @@
 			if(this.additionalAddress=="" || this.additionalAddress==null){
 				return "상세주소를 입력해 주세요.";
 			}
-			if(this.smsAgreed=="" || this.smsAgreed==null){
+			if(this.smsAgreed==null){
 				return "SMS수신 여부를 선택해 주세요.";
 			}
-			if(this.mailAgreed=="" || this.mailAgreed==null){
+			if(this.mailAgreed==null){
 				return "메일수신 여부를 선택해 주세요.";
 			} else {
 				return "valid";
@@ -303,7 +303,7 @@
 	}
 
 </script>
-<!-- <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script> -->
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
     function execDaumPostcode() {
         new daum.Postcode({
