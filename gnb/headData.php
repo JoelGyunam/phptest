@@ -35,5 +35,5 @@ if (strpos(__DIR__, '/home') === 0) {
 } elseif (strpos(__DIR__, 'C:\web\frontend') === 0){
     $basePath = 'c://web/frontend';
 }
-putenv("BASE_PATH=$basePath"); -->
-?>
+putenv("BASE_PATH=$basePath");
+?> -->

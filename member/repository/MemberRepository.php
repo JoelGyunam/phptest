@@ -8,12 +8,18 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/db/DBConnect.php');
 
         $DbConnect = new DbConnect();
 
-        $query = "SELECT * FROM $this->tableName WHERE `id`=$id;";
+        $query = "SELECT * FROM $this->tableName WHERE id = ?;";
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("i",$id);
+        $stmt->bind_param("s",$id);
         $stmt->execute();
         $result = $stmt->get_result();
-        return $result->num_rows;
+        $response = [];
+
+        while($row = $result->fetch_assoc()){
+            $response[] = ['uid' => $row['uid'], 'id' => $row['id']]; 
+        }
+
+        return count($response);
     }
  }
 ?>
