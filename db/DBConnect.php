@@ -8,8 +8,8 @@
         public $conn;
 
         function __construct(){
-            $this->host = getenv('DOCKER_ENV') ? "host.docker.internal" : "localhost";
-            $this->user = getenv('DOCKER_ENV') ? "root" : "localroot";
+            $this->host = file_exists('/.dockerenv') ? "host.docker.internal" : "localhost";
+            $this->user = file_exists('/.dockerenv') ? "root" : "localroot";
             $this->conn = new mysqli($this->host,$this->user,$this->password);
             if($this->conn->connect_error){
                 die("could not connected" . $this->conn->connect_error);
