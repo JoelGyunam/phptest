@@ -11,7 +11,7 @@ class Document {
             $this->title = "이용 약관";
             $this->content = $this->getContent($sort);
             $this->isOptional = false;
-        } else {
+        } else if($sort == "termsOfPrivacy") {
             $this->title = "개인정보취급방침";
             $this->content = $this->getContent($sort);
             $this->isOptional = false;
@@ -28,7 +28,7 @@ class Document {
     }
 
     private function loadContent($sort){
-        $filePath = getenv('BASE_PATH') . '/domain/terms/' . $sort . '.txt';
+        $filePath = $_SERVER['DOCUMENT_ROOT'] . '/domain/terms/' . $sort . '.txt';
         if (file_exists($filePath)) {
             $this->content = file_get_contents($filePath);
         } else {

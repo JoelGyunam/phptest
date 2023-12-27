@@ -1,7 +1,7 @@
 <div id="container" class="container-full">
     <div id="content" class="content">
         <div class="inner">
-            <?php require_once(getenv('BASE_PATH').'/member/register/registerLnb/registerHeader.php');?>
+            <?php require_once $_SERVER["DOCUMENT_ROOT"].'/member/register/registerLnb/registerHeader.php';?>
 
             <?php 
                 $sort = "termsOfUse";

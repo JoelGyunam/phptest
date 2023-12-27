@@ -42,7 +42,7 @@
         }
         
         private function createMemberTable(){
-            $scriptPath = getenv('BASE_PATH').'/db/member.sql';
+            $scriptPath = $_SERVER('DOCUMENT_ROOT').'/db/member.sql';
             $sqlScript = file_get_contents($scriptPath);
             if($this->conn->multi_query($sqlScript)===true){
                 echo "Table Created";

@@ -1,8 +1,3 @@
-<?php 
-// require 'inputMemberInfoService.php';
-require_once(getenv('BASE_PATH').'/member/register/inputMemberInfo/inputMemberInfoService.php');?>
-?>
-
 <div id="container" class="container-full">
     <div id="content" class="content">
         <div class="inner">
@@ -263,7 +258,7 @@ require_once(getenv('BASE_PATH').'/member/register/inputMemberInfo/inputMemberIn
     }
 
 </script>
-<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<!-- <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script> -->
 <script>
     function execDaumPostcode() {
         new daum.Postcode({

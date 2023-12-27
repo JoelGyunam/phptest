@@ -1,5 +1,6 @@
 <?php 
-include "../../../domain/member/Member.php";
+include $_SERVER["DOCUMENT_ROOT"].'/domain/member/Member.php';
+
 session_start();
 
 function generateCode($mobileNumber){

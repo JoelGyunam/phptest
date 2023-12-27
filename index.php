@@ -5,12 +5,12 @@
 
     <?php include 'gnb/headData.php' ?>
     <body>
-        <?php include getenv('BASE_PATH').'/gnb/skipnav.php' ?>
+        <?php include $_SERVER["DOCUMENT_ROOT"].'/gnb/skipnav.php' ?>
         <div id="wrap">
             <?php 
-            include getenv('BASE_PATH').'/gnb/header.php';
-            include getenv('BASE_PATH').'/main/main_template.php';
-            include getenv('BASE_PATH').'/gnb/footer.php';
+            include $_SERVER["DOCUMENT_ROOT"].'/gnb/header.php';
+            include $_SERVER["DOCUMENT_ROOT"].'/main/main_template.php';
+            include $_SERVER["DOCUMENT_ROOT"].'/gnb/footer.php';
             ?>
         </div>
     </body>

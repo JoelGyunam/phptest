@@ -1,3 +1,4 @@
+<script type="text/javascript" src="../js/applyclass_react.js"></script>
 <div id="container">
     <?php include 'main_banner.php'?>
     <div id="content" class="content">
@@ -9,4 +10,3 @@
     <?php include 'quick-bar.php'?>
 </div>
 
-<script type="text/javascript" src="<?php echo getenv('BASE_PATH') . "/js/applyclass_react.js"; ?>"></script>

@@ -1,5 +1,5 @@
 <?php 
-    require_once(getenv('BASE_PATH').'/domain/terms/TermsDocument.php');
+    require_once $_SERVER["DOCUMENT_ROOT"].'/domain/terms/TermsDocument.php';
 
     $document = new Document($sort);
     $termsTitle = $document->getTitle();

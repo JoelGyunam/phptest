@@ -4,16 +4,16 @@
 <!--[if (IE 8)]><html class="no-js ie8" xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko" lang="ko"><![endif]-->
 
     <?php
-    require '../gnb/headData.php';
+    require $_SERVER["DOCUMENT_ROOT"].'/gnb/headData.php';
     session_start();
     ?>
     <body>
-        <?php include getenv('BASE_PATH').'/gnb/skipnav.php' ?>
+        <?php include $_SERVER["DOCUMENT_ROOT"].'/gnb/skipnav.php' ?>
         <div id="wrap">
             <?php
-            include getenv('BASE_PATH').'/gnb/header.php';
-            include getenv('BASE_PATH').'/member/register/inputMemberInfo/inputMemberInfoSection.php';
-            include getenv('BASE_PATH').'/gnb/footer.php'
+            include $_SERVER["DOCUMENT_ROOT"].'/gnb/header.php';
+            include $_SERVER["DOCUMENT_ROOT"].'/member/register/inputMemberInfo/inputMemberInfoSection.php';
+            include $_SERVER["DOCUMENT_ROOT"].'/gnb/footer.php'
             ?>
         </div>
     </body>
