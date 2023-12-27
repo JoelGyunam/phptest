@@ -32,7 +32,8 @@
         $(".eachCheckBox").change(function(){
             var btnCnt =  $('.eachCheckBox').length;
             var checkedCnt =  $('.eachCheckBox:checked').length;
-            if(btnCnt===checkedCnt){generatePhoneSession
+
+            if(btnCnt===checkedCnt){
                 isChecked = true;
                 $("#allAgreed").prop("checked",true);
                 $("#nextBtn").removeClass("btn-l-gray").addClass("btn-l");

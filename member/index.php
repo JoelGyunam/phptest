@@ -1,6 +1,8 @@
 <?php
 $mode = isset($_GET['mode']) ? $_GET['mode'] : 'default';
 
+
+
 switch ($mode) {
     case 'step_01':
     // 회원가입 1단계 관련 코드
@@ -27,14 +29,10 @@ switch ($mode) {
         // 회원가입 완료 관련 코드
         include 'steps/complete.php';
         break;
-    
-    case 'dbTest':
-        include 'repository/MemberRepository.php';
-        break;
 
     default:
         // 기본 페이지 또는 오류 페이지
-        include 'register/register2.php';
+        include 'register/register.php';
         break;
     
     }

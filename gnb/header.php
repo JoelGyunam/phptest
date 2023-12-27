@@ -1,3 +1,11 @@
+<script>
+function go_link(action) {
+    if (action === 'register') {
+        window.location.href = "/member/index.php?mode=step_01";
+    }
+}
+</script>
+
 <div id="header" class="header">
 	<div class="nav-section">
 		<div class="inner p-r">
@@ -105,7 +113,7 @@
 			<div class="link-box">
 				<!-- 로그인전 -->
 				<a href="#">로그인</a>
-				<a href="member/index.php?mode=step_01">회원가입</a>
+				<a href="javascript:go_link('register');">회원가입</a>
 				<a href="#">상담/고객센터</a>
 				<!-- 로그인후 -->
 				<!-- <a href="#">로그아웃</a>
@@ -115,3 +123,4 @@
 		</div>
 	</div>
 </div>
+
