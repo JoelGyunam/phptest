@@ -48,7 +48,7 @@
                         alert("인증번호가 발송되었습니다.");
                         isCodeSent = true;
                     }
-                    ,error: function(){
+                    ,error: function(result){
                         alert("인증번호 발송에 실패했습니다.");
                     }
                 });

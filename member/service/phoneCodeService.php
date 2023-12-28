@@ -1,16 +1,11 @@
 <?php 
-include $_SERVER["DOCUMENT_ROOT"].'/member/domain/Member.php';
-
 session_start();
 
 function generateCode($mobileNumber){
+    require_once $_SERVER['DOCUMENT_ROOT'] . '/member/domain/Member.php';
     $mobileCode = '123456';
     $_SESSION['phoneVerificationCode'] = $mobileCode;
     $_SESSION['phoneNumber'] = $mobileNumber;
-    $member = new Member();
-    $member->setMobileNumber($mobileNumber);
-    $member->setMobileCode($mobileCode);
-
 }
 
 function verifyCode($inputCode){

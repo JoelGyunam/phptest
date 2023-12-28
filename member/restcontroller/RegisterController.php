@@ -5,9 +5,10 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
     switch($action){
         case 'generateCode':
             require_once $_SERVER["DOCUMENT_ROOT"] . '/member/service/phoneCodeService.php';
-            $mobileNumber = $_POST['mobileNumber']??'';
+            $mobileNumber = $_POST['mobileNumber'] ?? '';
             echo generateCode($mobileNumber);
             break;
+
         case 'verifyCode':
             require_once $_SERVER["DOCUMENT_ROOT"] . '/member/service/phoneCodeService.php';
             $inputCode = $_POST['inputCode'] ?? '';

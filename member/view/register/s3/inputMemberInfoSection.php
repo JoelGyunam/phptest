@@ -135,10 +135,23 @@
 						,'member' : member
 					}
 					,success: function(result){
-						console.log(result)
+
+						var parsedResult = JSON.parse(result);
+						if(parsedResult.result=="valid_fail" || parsedResult.result=="duplicatedId"){
+							alert(parsedResult.message);
+						} else if(parsedResult.result=="session_end"){
+							window.history.back();
+							alert(parsedResult.message);
+							window.location.href="index.php?mode=step_02";
+						} else {
+							window.location.href="index.php?mode=complete";
+						}
+
+						console.log(result);
+
 					}
-					,error: function(){
-						console.log("오류")
+					,error: function(result){
+						console.log("오류가 발생했습니다.");
 					}
 				})
 			}
