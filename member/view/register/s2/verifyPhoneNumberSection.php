@@ -1,7 +1,7 @@
 <div id="container" class="container-full">
     <div id="content" class="content">
         <div class="inner">
-            <?php include_once $_SERVER["DOCUMENT_ROOT"].'/member/register/registerLnb/registerHeader.php';?>
+            <?php include_once $_SERVER["DOCUMENT_ROOT"].'/member/view/register/lnb/registerHeader.php';?>
             <div class="tit-box-h4">
 				<h3 class="tit-h4">본인인증</h3>
 			</div>
@@ -38,13 +38,13 @@
             var mobileNumber = $("#mobileNumberBegin").val()+$("#mobileNumberCenter").val()+$("#mobileNumberLast").val();
             if(validateMobileNumber(mobileNumber)){
                 $.ajax({
-                    url: 'register/s2_verifyPhoneNumber/service/phoneCodeService.php'
+                    url: 'restcontroller/RegisterController.php'
                     ,type: 'POST'
                     ,data: {
                         'action': "generateCode"
                         ,'mobileNumber' : mobileNumber
                     }
-                    ,success: function(){
+                    ,success: function(result){
                         alert("인증번호가 발송되었습니다.");
                         isCodeSent = true;
                     }
@@ -65,7 +65,7 @@
             } 
 
             $.ajax({
-                url: 'register/s2_verifyPhoneNumber/service/phoneCodeService.php'
+                url: 'restcontroller/RegisterController.php'
                 ,type: 'POST'
                 ,data: {
                     'action': "verifyCode"

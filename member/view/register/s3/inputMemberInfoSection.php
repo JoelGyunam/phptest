@@ -1,7 +1,7 @@
 <div id="container" class="container-full">
     <div id="content" class="content">
         <div class="inner">
-			<?php require_once(getenv('BASE_PATH').'/member/register/registerLnb/registerHeader.php');?>
+			<?php require_once(getenv('BASE_PATH').'/member/view/register/lnb/registerHeader.php');?>
 
             <div class="tit-box-h4">
 				<h3 class="tit-h4">본인인증</h3>
@@ -128,7 +128,7 @@
 				alert(validCheck);
 			} else {
 				$.ajax({
-					url: 'register/s4_registerConfirmed/service/registerConfirmedService.php'
+					url: 'restcontroller/RegisterController.php'
 					,type: 'POST'
 					,data: {
 						'action': "newMember"
@@ -234,7 +234,7 @@
 		}
 
 		$.ajax({
-			url: 'register/s3_inputMemberInfo/service/inputMemberInfoService.php'
+			url: 'restcontroller/RegisterController.php'
 			,type: 'POST'
 			,data: {
 				'action': "idcheck"
@@ -314,7 +314,7 @@
 	}
 
 </script>
-<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<!-- <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script> -->
 <script>
     function execDaumPostcode() {
         new daum.Postcode({

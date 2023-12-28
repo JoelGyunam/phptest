@@ -28,7 +28,7 @@ class Document {
     }
 
     private function loadContent($sort){
-        $filePath = $_SERVER['DOCUMENT_ROOT'] . '/domain/terms/' . $sort . '.txt';
+        $filePath = $_SERVER['DOCUMENT_ROOT'] . '/member/src/termsfile/' . $sort . '.txt';
         if (file_exists($filePath)) {
             $this->content = file_get_contents($filePath);
         } else {
