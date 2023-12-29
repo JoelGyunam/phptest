@@ -42,7 +42,7 @@
         }
         
         private function createMemberTable(){
-            $scriptPath = $_SERVER('DOCUMENT_ROOT').'/db/member.sql';
+            $scriptPath = $_SERVER['DOCUMENT_ROOT'].'/db/member.sql';
             $sqlScript = file_get_contents($scriptPath);
             if($this->conn->multi_query($sqlScript)===true){
                 echo "Table Created";
@@ -52,7 +52,9 @@
         }
 
         function __destruct(){
-            $this->conn->close();
+            if($this->conn){
+                $this->conn->close();
+            }
         }
     }
 ?>
