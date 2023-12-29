@@ -7,7 +7,6 @@ function verifyMemberInfo($memberValue){
     $memberDB = new MemberDB();
     $jsonResult = $member->setMember($memberValue);
     $result = json_decode($jsonResult)->result;
-    print_r($memberValue);
     if($result=="succeed"){
         $memberDB->insertMember($memberValue);
     }

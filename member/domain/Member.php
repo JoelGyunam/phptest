@@ -148,7 +148,7 @@ class Member {
     }
 
     function idRegex($str){
-        $pattern = '/^[a-z][a-z0-9]{3,4}$/';
+        $pattern = '/^[a-z][a-z0-9]{3,14}$/';
         return preg_match($pattern, $str) === 1;
     }
 
