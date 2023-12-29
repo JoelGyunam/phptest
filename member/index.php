@@ -18,12 +18,12 @@ switch ($mode) {
         break;
     
     case 'regist':
-        include $_SERVER["DOCUMENT_ROOT"].'/member/view/register/s4/step_04.php';
+        include $_SERVER["DOCUMENT_ROOT"].'/member/view/register/s3/step_03.php';
         break;
 
     case 'complete':
         // 회원가입 완료 관련 코드
-        include $_SERVER["DOCUMENT_ROOT"].'/member/steps/complete.php';
+        include $_SERVER["DOCUMENT_ROOT"].'/member/view/register/s4/step_04.php';
         break;
 
     default:

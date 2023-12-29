@@ -151,7 +151,6 @@ $(document).ready(function(){
     $("#regSubmitBtn").on("click",function(){
         var member = new Member();
         member.setMember();
-        console.log(member);
         var validCheck = member.isValid();
         if(validCheck!="valid"){
             alert(validCheck);
@@ -163,28 +162,29 @@ $(document).ready(function(){
                     'action': "newMember"
                     ,'member' : member
                 }
-                ,success: function(result){
-
-                    var parsedResult = JSON.parse(result);
+                ,dataType: 'json'
+                ,success: function(parsedResult){
                     if(parsedResult.result=="valid_fail" || parsedResult.result=="duplicatedId"){
                         alert(parsedResult.message);
                     } else if(parsedResult.result=="session_end"){
                         window.history.back();
                         alert(parsedResult.message);
                         window.location.href="index.php?mode=step_02";
+                    } else if(parsedResult.dbResult!="success") {
+                        alert("오류가 발생했습니다.");
                     } else {
                         window.location.href="index.php?mode=complete";
                     }
-
-                    console.log(result);
-
-                }
-                ,error: function(result){
-                    console.log("오류가 발생했습니다.");
                 }
             })
         }
     })
+
+    if(paramDetect()=="regist"){
+        window.location.href="index.php?mode=step_03"
+    }
+
+
 });
 
 class Member{
@@ -264,8 +264,9 @@ function idDuplicationChecker(id, callback){
             'action': "idcheck"
             ,'id' : id
         }
-        ,success: function(result){
-            if(result=="available"){
+        ,dataType: 'json'
+        ,success: function(response){
+            if(response.result=="available"){
                 callback(false);
             } else {
                 callback(true);
@@ -337,8 +338,17 @@ function normalCursor(element) {
     element.style.cursor = 'default';
 }
 
+function paramDetect(){
+    var param = $(location).attr('search');
+    if(param.includes('mode=')) {
+        var modeValue = param.split('mode=')[1];
+        return modeValue;
+    }
+}
 </script>
+
 <!-- <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script> -->
+
 <script>
     function execDaumPostcode() {
         new daum.Postcode({

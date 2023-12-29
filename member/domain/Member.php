@@ -6,6 +6,7 @@ class Member {
     public $id;
     public $idDuplicationCheck;
     public $password;
+    public $passwordConfirm;
     public $email;
     public $mobileCode;
     public $mobileNumber;
@@ -17,6 +18,7 @@ class Member {
     public $mailAgreed;
     public $regDttm;
     public $modDttm;
+    public $hashedPw;
 
     public function setMobileNumber($mobileNumber){
         $this->mobileNumber = $mobileNumber;
@@ -42,6 +44,7 @@ class Member {
         $this->additionalAddress = $memberValue["additionalAddress"];
         $this->smsAgreed = $memberValue["smsAgreed"];
         $this->mailAgreed = $memberValue["mailAgreed"];
+        $this->hashedPw = hash('sha256', $this->password);
 
         return $this->registerValidChecker($memberValue);
     }
@@ -84,16 +87,14 @@ class Member {
             return json_encode($resultArr,JSON_UNESCAPED_UNICODE);    
         }
 
-        if($memberValue["pw"] == $memberValue["pwConfirm"]){
-                $this->password = hash('sha256', $this->password);
-        } else {
-            $message = "비밀번호가 일치하지 않습니다.";
+        if($this->password = "" || $this->passwordConfirm==""){
+            $message = "비밀번호를 입력해 주세요.";
             $resultArr = array("result" => "valid_fail", "message" => $message);
             return json_encode($resultArr,JSON_UNESCAPED_UNICODE);   
         }
 
-        if($this->password = "" || $this->passwordConfirm==""){
-            $message = "비밀번호를 입력해 주세요.";
+        if($this->password == $this->passwordConfirm){
+            $message = "비밀번호가 일치하지 않습니다.";
             $resultArr = array("result" => "valid_fail", "message" => $message);
             return json_encode($resultArr,JSON_UNESCAPED_UNICODE);   
         }
@@ -143,7 +144,7 @@ class Member {
         else {
             $message = "pass";
             $resultArr = array("result" => "succeed", "message" => $message);
-            return json_encode($resultArr,JSON_UNESCAPED_UNICODE);
+            return json_encode($resultArr);
         }
     }
 

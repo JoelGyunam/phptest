@@ -1,3 +1,4 @@
+
 <?php
 require_once($_SERVER["DOCUMENT_ROOT"].'/db/DBConnect.php');
  class MemberDB extends DbConnect{
@@ -5,9 +6,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/db/DBConnect.php');
     protected $tableName = 'member';
 
     function findById($id){
-
-        $DbConnect = new DbConnect();
-
+        $dbConnect = new DbConnect();
         $query = "SELECT * FROM $this->tableName WHERE id = ?;";
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param("s",$id);
@@ -18,37 +17,42 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/db/DBConnect.php');
         while($row = $result->fetch_assoc()){
             $response[] = ['uid' => $row['uid'], 'id' => $row['id']]; 
         }
-
         return count($response);
     }
 
     function insertMember($member){
-        $member['smsAgreed'] = $member['smsAgreed'] ? 1 : 0;
-        $member['mailAgreed'] = $member['mailAgreed'] ? 1 : 0;
-        $DbConnect = new DbConnect();
-        $query = "INSERT INTO " . $this->tableName . " (id, `password`, email, mobileNumber, telNumber, postalCode, `address`, additionalAddress, smsAgreed, mailAgreed) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ;";
+        $dbConnect = new DbConnect();
+        if($member->smsAgreed=="true"){
+            $member->smsAgreed = 1;
+        } else {
+            $member->smsAgreed = 0;
+        }
+
+        if($member->mailAgreed=="true"){
+            $member->mailAgreed = 1;
+        } else {
+            $member->mailAgreed = 0;
+        }
+        $query = "INSERT INTO " . $this->tableName . " (id, password, email, mobileNumber, telNumber, postalCode, address, additionalAddress, smsAgreed, mailAgreed) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ;";
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param("ssssssssii"
-                        ,$member['id']
-                        , $member['pw']
-                        , $member['email']
-                        , $member['mobileNumber']
-                        , $member['telNumber']
-                        , $member['postalCode']
-                        , $member['address']
-                        , $member['additionalAddress']
-                        , $member['smsAgreed']
-                        , $member['mailAgreed']);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        if($result){
-            echo "success";
-        } else {
-            echo "fail".$stmt->error;
-        }
-        $stmt->close();
-        $this->conn->close();
-    }
+                        ,$member->id
+                        , $member->hashedPw
+                        , $member->email
+                        , $member->mobileNumber
+                        , $member->telNumber
+                        , $member->postalCode
+                        , $member->address
+                        , $member->additionalAddress
+                        , $member->smsAgreed
+                        , $member->mailAgreed);
+        $result = $stmt->execute();
 
+        if($result){
+            return "success";
+        } else {
+            return "fail".$stmt->error;
+        }
+    }
  }
 ?>
