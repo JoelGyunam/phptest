@@ -54,5 +54,24 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/db/DBConnect.php');
             return "fail".$stmt->error;
         }
     }
+
+    function findByIdAndPassword($member){
+        $dbConnect = new DbConnect();
+
+        $id = $member->id;
+        $hashedPw = $member->hashedPw;
+
+        $query ="SELECT `uid`,`id` FROM $this->tableName WHERE `id` = ? AND `password` = ?;";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("ss",$id,$hashedPw);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $response = [];
+        while($row = $result->fetch_assoc()){
+            $response[] = ['uid' => $row['uid'], 'id' => $row['id']];
+        }
+        return $response;
+    }
+
  }
 ?>

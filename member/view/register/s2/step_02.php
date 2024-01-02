@@ -5,7 +5,6 @@
 
     <?php
     require $_SERVER["DOCUMENT_ROOT"].'/gnb/headData.php';
-    session_start();
     ?>
     <body>
         <?php include $_SERVER["DOCUMENT_ROOT"].'/gnb/skipnav.php' ?>

@@ -22,7 +22,7 @@
 			</div>
 			
 			<div class="box-btn">
-				<a href="#" class="btn-m-gray">회원가입</a>
+				<a href="/member/index.php?mode=step_01" class="btn-m-gray">회원가입</a>
 				<a href="#" class="btn-m-gray">ID/PW 찾기</a>
 			</div>
 		</div>
@@ -53,10 +53,44 @@
 			loginInfo.setMember();
 			var id = loginInfo.id;
 			var pw = loginInfo.password;
-			console.log(loginInfo);
+
+			if(id == ""){
+				alert("아이디를 입력해 주세요.");
+				return;
+			}
+
+			if(pw == ""){
+				alert("비밀번호를 입력해 주세요.");
+				return;
+			}
+
+			$.ajax({
+				url:'restcontroller/RegisterController.php'
+				,type:'POST'
+				,data:{
+					'action':'login'
+					,'member':loginInfo
+				}
+				,dataType:'json'
+				,success: function(response){
+					var result = response.result;
+					if(result == "fail"){
+						alert("아이디 또는 비밀번호를 확인해 주세요.");
+					} else {
+						window.location.href="/";
+					}
+				}
+				,error: function(){
+					alert("오류가 발생했습니다. 다시 시도해 주세요.");
+				}
+			})
+
 		});
 
 
+		$(".login-close").on("click",function(){
+			window.history.back();
+		})
 	});
 
 	class LoginInfo {

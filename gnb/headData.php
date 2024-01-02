@@ -36,4 +36,6 @@ if (strpos(__DIR__, '/home') === 0) {
     $basePath = 'c://web/frontend';
 }
 putenv("BASE_PATH=$basePath");
+
+session_start();
 ?> -->

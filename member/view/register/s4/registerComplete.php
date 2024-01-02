@@ -16,7 +16,7 @@
 			</div>
 
 			<div class="box-btn mt30">
-				<a href="#" class="btn-l">로그인</a>
+				<a href="http://test.hackers.com/member/login.html" class="btn-l">로그인</a>
 				<a href="#" class="btn-l-line ml5">수강신청</a>
 			</div>
 

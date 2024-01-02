@@ -34,6 +34,15 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
             echo $resultObj;
             break;
 
+        case 'login' : 
+            require_once $_SERVER["DOCUMENT_ROOT"] . '/member/service/loginService.php';
+            $memberValue = $_POST['member'] ?? '';
+            $loginService = new LoginService();
+            $result = $loginService->tryLogin($memberValue);
+            $response = json_encode(array("result"=>$result)); //{"result":"success"}
+            echo $response;
+            break;
+
         default :
             echo "잘못된 요청";
             break;
@@ -44,7 +53,8 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
     switch($sess){
         case 'delete':
             require_once $_SERVER["DOCUMENT_ROOT"] . "/member/service/sessionService.php";
-            destroySession();
+            $sessionService = new SessionService();
+            $sessionService->destroySession();
             break;
     }
 } else {

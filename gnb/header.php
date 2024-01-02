@@ -2,7 +2,28 @@
 function go_link(action) {
     if (action === 'register') {
         window.location.href = "/member/index.php?mode=step_01";
-    }
+    };
+	if(action === 'logout') {
+		if(confirm("로그아웃 하시겠습니까?")==false){
+			return;
+		};
+		$.ajax({
+			url:"/member/restcontroller/RegisterController.php"
+			,type:"DELETE"
+			,data:{
+				"sess":"delete"
+			}
+			,success:function(){
+				window.location.href="/";
+			}
+			, error:function(){
+				alert("오류가 발생했습니다. 다시 시도해 주세요.");
+			}
+		});
+	};
+	if(action === 'login'){
+		window.location.href="/member/login.html";
+	}
 }
 </script>
 
@@ -107,20 +128,29 @@ function go_link(action) {
 		</div>
 
 	</div>
-
 	<div class="top-section">
 		<div class="inner">
 			<div class="link-box">
-				<!-- 로그인전 -->
-				<a href="#">로그인</a>
-				<a href="javascript:go_link('register');">회원가입</a>
-				<a href="#">상담/고객센터</a>
-				<!-- 로그인후 -->
-				<!-- <a href="#">로그아웃</a>
-				<a href="#">내정보</a>
-				<a href="#">상담/고객센터</a> -->
+				<?php 
+				// 'id' 세션 변수가 설정되었는지 확인
+				if(isset($_SESSION['id']) && $_SESSION['id'] != "") {
+					// 사용자가 로그인한 경우
+					?>
+					<a href="javascript:go_link('logout');">로그아웃</a>
+					<a href="#">내정보</a>
+					<a href="#">상담/고객센터</a>
+					<?php 
+				} else {
+					// 사용자가 로그인하지 않은 경우
+					?>
+					<a href="javascript:go_link('login');">로그인</a>
+					<a href="javascript:go_link('register');">회원가입</a>
+					<a href="#">상담/고객센터</a>
+					<?php
+				}
+				?>
 			</div>
 		</div>
 	</div>
 </div>
-
+</div>
