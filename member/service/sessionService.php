@@ -1,15 +1,17 @@
 <?php 
 
 class SessionService{
-    function destroySession(){
-        session_start();
-        session_destroy();
+    function resetSession(){
+        $_SESSION = array();
     }
 
-    function loginSession($uid,$id){
-        session_start();
-        $_SESSION['uid'] = $uid;
+    function loginSession($uid,$id,$name,$mobileNumber){
+        if(session_status()== PHP_SESSION_NONE){
+            session_start();
+        }        $_SESSION['uid'] = $uid;
         $_SESSION['id'] = $id;
+        $_SESSION['name'] = $name;
+        $_SESSION['mobileNumber'] = $mobileNumber;
     }
 }
 

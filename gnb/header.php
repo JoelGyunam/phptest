@@ -7,22 +7,14 @@ function go_link(action) {
 		if(confirm("로그아웃 하시겠습니까?")==false){
 			return;
 		};
-		$.ajax({
-			url:"/member/restcontroller/RegisterController.php"
-			,type:"DELETE"
-			,data:{
-				"sess":"delete"
-			}
-			,success:function(){
-				window.location.href="/";
-			}
-			, error:function(){
-				alert("오류가 발생했습니다. 다시 시도해 주세요.");
-			}
-		});
+		<?php session_destroy();?>
+		window.location.href="/";
 	};
 	if(action === 'login'){
 		window.location.href="/member/login.html";
+	};
+	if(action === 'myInfo'){
+		window.location.href="/member/index.php?mode=modify";
 	}
 }
 </script>
@@ -133,11 +125,11 @@ function go_link(action) {
 			<div class="link-box">
 				<?php 
 				// 'id' 세션 변수가 설정되었는지 확인
-				if(isset($_SESSION['id']) && $_SESSION['id'] != "") {
+				if(isset($_SESSION['uid']) && $_SESSION['id'] != "") {
 					// 사용자가 로그인한 경우
 					?>
 					<a href="javascript:go_link('logout');">로그아웃</a>
-					<a href="#">내정보</a>
+					<a href="javascript:go_link('myInfo');">내정보</a>
 					<a href="#">상담/고객센터</a>
 					<?php 
 				} else {

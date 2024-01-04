@@ -1,5 +1,6 @@
 CREATE TABLE `member`(
 	`uid` INT NOT NULL PRIMARY KEY AUTO_INCREMENT
+    ,`name` VARCHAR(8) NOT NULL
     ,`id` VARCHAR(16) NOT NULL UNIQUE
     ,`password` CHAR(64) NOT NULL
     ,`email` VARCHAR(64) NOT NULL

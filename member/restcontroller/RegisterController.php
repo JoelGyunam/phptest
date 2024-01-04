@@ -4,33 +4,44 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
     $action = $_POST['action']??'';
     switch($action){
         case 'generateCode':
-            require_once $_SERVER["DOCUMENT_ROOT"] . '/member/service/phoneCodeService.php';
+            require_once $_SERVER["DOCUMENT_ROOT"] . '/member/service/verifyCodeService.php';
+            $verificationService = new VerificationService();
             $mobileNumber = $_POST['mobileNumber'] ?? '';
-            echo generateCode($mobileNumber);
+            $result = $verificationService->generatePhoneCode($mobileNumber,"new");
+            $response = json_encode(array("result"=>$result));
+            echo $response;
             break;
 
         case 'verifyCode':
-            require_once $_SERVER["DOCUMENT_ROOT"] . '/member/service/phoneCodeService.php';
+            require_once $_SERVER["DOCUMENT_ROOT"] . '/member/service/verifyCodeService.php';
+            $verificationService = new VerificationService();
             $inputCode = $_POST['inputCode'] ?? '';
-            if(verifyCode($inputCode)){
-                echo "true";
-            } else{
-                echo "false";
+            $numberOrMail = $_POST['numberOrMail'] ?? '';
+            $type = $_POST['type'] ??'';
+            if($type == "phone"){
+                $result = $verificationService->verifyPhoneCode($inputCode,$numberOrMail);
+            } else if($type == "email"){
+                $result = $verificationService->verifyEmailCode($inputCode,$numberOrMail);
             }
+            $response = json_encode(array("result"=>$result));
+            echo $response;
             break;
 
         case 'idcheck' : 
-            require_once $_SERVER["DOCUMENT_ROOT"] . '/member/service/inputMemberInfoService.php';
+            require_once $_SERVER["DOCUMENT_ROOT"] . '/member/service/inputMemberService.php';
+            $inputMemberService = new InputMemberService();
             $id = $_POST['id'] ?? '';
-            $resultArr = array("result" => idDuplicateCheck($id));
+            $resultArr = array("result" => $inputMemberService->idDuplicateCheck($id));
             $response = json_encode($resultArr);
             echo $response;
             break;
 
         case 'newMember' :
-            require_once $_SERVER["DOCUMENT_ROOT"] . '/member/service/registerConfirmedService.php';
+            require_once $_SERVER["DOCUMENT_ROOT"] . '/member/service/inputMemberService.php';
+            $inputMemberService = new InputMemberService();
+
             $memberValue = $_POST['member'] ?? '';
-            $resultObj = verifyMemberInfo($memberValue);
+            $resultObj = $inputMemberService->addNewMember($memberValue);
             echo $resultObj;
             break;
 
@@ -40,6 +51,31 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
             $loginService = new LoginService();
             $result = $loginService->tryLogin($memberValue);
             $response = json_encode(array("result"=>$result)); //{"result":"success"}
+            echo $response;
+            break;
+
+        case 'generateVerifCode' : 
+            require_once $_SERVER["DOCUMENT_ROOT"] . '/member/service/verifyCodeService.php';
+            require_once $_SERVER["DOCUMENT_ROOT"] . '/member/dto/MemberFindDto.php';
+            $memberFindDto = new MemberFindDto();
+            $verificationService = new VerificationService();
+
+            $idOrPw = $_POST['idOrPw'];
+            $memberValue = $_POST['memberValue'];
+            $memberFindDto->name = $memberValue['name'];
+            $memberFindDto->method = $memberValue['method'];
+            $memberFindDto->number = $memberValue['number'];
+
+            if($idOrPw=="id"){
+                $result = $verificationService->findId($memberFindDto);
+            }
+            
+            if($idOrPw=="pw"){
+                $memberFindDto->id = $memberValue['id'];
+                $result = $verificationService->findPw($memberFindDto);
+            }
+
+            $response = json_encode(array("result"=>$result)); //{"result":"success}
             echo $response;
             break;
 
@@ -54,10 +90,39 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
         case 'delete':
             require_once $_SERVER["DOCUMENT_ROOT"] . "/member/service/sessionService.php";
             $sessionService = new SessionService();
-            $sessionService->destroySession();
+            $sessionService->resetSession();
             break;
     }
-} else {
+} else if($_SERVER['REQUEST_METHOD']=='UPDATE'){
+    parse_str(file_get_contents("php://input"),$updateVars);
+    $action = $updateVars['action'];
+    switch($action){
+        case 'pw' : 
+            require_once $_SERVER["DOCUMENT_ROOT"] . '/member/dto/PasswordUpdateDto.php';
+            $pwObj = $updateVars['pwObj'];
+            $uid = $pwObj['uid'];
+            $id = $pwObj['id'];
+            $pw = $pwObj['pw'];
+            $pwConfirm = $pwObj['pwConfirm'];
+            $pwUpdateDto = new PasswordUpdateDto($uid,$id,$pw,$pwConfirm);
+
+            require_once $_SERVER["DOCUMENT_ROOT"] . "/member/service/updateMemberInfoService.php";
+            $updateMemberInfoService = new UpdateMemberInfoService();
+            $result = $updateMemberInfoService->updatePassword($pwUpdateDto);
+            $response = json_encode(array("result"=>$result));
+            echo $response; 
+            break;
+
+        case 'memberInfo' :
+            require_once $_SERVER["DOCUMENT_ROOT"] . '/member/service/updateMemberInfoService.php';
+            $memberValue = $updateVars['member'] ?? '';
+            $updateMemberInfoService = new UpdateMemberInfoService();
+            $result = $updateMemberInfoService->updateUserInfo($memberValue);
+            $response = json_encode(array("result"=>$result));
+            echo $response; // {"result":"updated/noChanges/dbFail"}
+    }
+} 
+else {
     echo "잘못된 http method";
 }
 

@@ -26,9 +26,30 @@ switch ($mode) {
         include $_SERVER["DOCUMENT_ROOT"].'/member/view/register/s4/step_04.php';
         break;
 
+    case 'find_id':
+        include $_SERVER["DOCUMENT_ROOT"].'/member/view/find/findId/findId.php';
+        break;
+
+    case 'find_id_complete':
+        include $_SERVER["DOCUMENT_ROOT"].'/member/view/find/findIdComplete/findIdComplete.php';
+        break;
+
+    case 'find_pw':
+        include $_SERVER["DOCUMENT_ROOT"].'/member/view/find/findPw/findPw.php';
+        break;
+
+    case 'find_pw_complete':
+        include $_SERVER["DOCUMENT_ROOT"].'/member/view/find/findPwComplete/findPwComplete.php';
+        break;
+
+    case 'modify':
+        include $_SERVER["DOCUMENT_ROOT"].'/member/view/modify/modify.php';
+        break;
+
+
     default:
         // 기본 페이지 또는 오류 페이지
-        include $_SERVER["DOCUMENT_ROOT"].'/member/register/register.php';
+        include $_SERVER["DOCUMENT_ROOT"].'/member/view/register/s1/step_01.php';
         break;
     }
 

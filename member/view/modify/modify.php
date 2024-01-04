@@ -11,7 +11,7 @@
         <div id="wrap">
             <?php
             include $_SERVER["DOCUMENT_ROOT"].'/gnb/header.php';
-            include $_SERVER["DOCUMENT_ROOT"].'/member/view/register/s4/registerCompleteSection.php';
+            include $_SERVER["DOCUMENT_ROOT"].'/member/view/modify/modifySection.php';
             include $_SERVER["DOCUMENT_ROOT"].'/gnb/footer.php'
             ?>
         </div>

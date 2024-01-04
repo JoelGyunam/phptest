@@ -21,7 +21,7 @@
 						</tr>
 						<tr>
 							<th scope="col"><span class="icons">*</span>아이디</th>
-							<td><input id="id" type="text" class="input-text" style="width:302px" placeholder="영문자로 시작하는 4~15자의 영문소문자, 숫자"><a id="idCheckBtn" onmouseover="hoverEffect(this)" onmouseout="normalCursor(this)" class="btn-s-tin ml10">중복확인</a></td>
+							<td><input id="id" type="text" class="input-text" style="width:302px" placeholder="영문자로 시작하는 4~15자의 영문소문자, 숫자"><a id="idCheckBtn" href="javascript:idDuplicationCheckBtn()" class="btn-s-tin ml10">중복확인</a></td>
 						</tr>
 						<tr>
 							<th scope="col"><span class="icons">*</span>비밀번호</th>
@@ -59,7 +59,7 @@
 							<th scope="col"><span class="icons">*</span>주소</th>
 							<td>
 								<p>
-									<label>우편번호 <input id="postalCode" type="text" class="input-text ml5" style="width:242px" disabled></label><a id="findAddressBtn" class="btn-s-tin ml10" onclick="execDaumPostcode()" onmouseover="hoverEffect(this)" onmouseout="normalCursor(this)">주소찾기</a>
+									<label>우편번호 <input id="postalCode" type="text" class="input-text ml5" style="width:242px" disabled></label><a id="findAddressBtn" class="btn-s-tin ml10" href="javascript:execDaumPostcode()">주소찾기</a>
 								</p>
 								<p class="mt10">
 									<label>기본주소 <input id="address" type="text" class="input-text ml5" style="width:719px" disabled></label>
@@ -105,7 +105,7 @@
 				</table>
 
 				<div id="regSubmitBtn" class="box-btn">
-					<a class="btn-l" onmouseover="hoverEffect(this)" onmouseout="normalCursor(this)">회원가입</a>
+					<a href="javascript:regSubmitBtn()"class="btn-l">회원가입</a>
 				</div>
 			</div>
 
@@ -116,76 +116,6 @@
 
 <script>
 var idDuplicateChecked = false;
-$(document).ready(function(){
-    phoneNumberFiller("<?php echo $_SESSION['phoneNumber']?>");
-    emailDomainSplit();
-    emailDomainSelector();
-
-    /*
-    *	id중복 체크 : id필드 null 체크 -> id중복체크function 호출 -> 중복 : idDuplicateChecked = false, 미중복 = true;
-    */
-    $("#idCheckBtn").on("click",function(){
-        var id = $("#id").val();
-        if(id==""){
-            alert("중복확인을 위해 아이디를 입력해 주세요.");
-            return;
-        }
-        idDuplicationChecker(id, function(isDuplicated) {
-            if(!isDuplicated){
-                alert("사용 가능한 ID입니다.");
-                idDuplicateChecked = true;
-            } else {
-                alert("이미 사용중인 ID입니다.");
-                idDuplicateChecked = false;
-            }
-        });
-    });
-
-    $("#id").on("change",function(){
-        idDuplicateChecked = false;
-    });
-
-    /*
-    *	회원가입 버튼 클릭 -> 유효성 검사 -> valid: 서버 가입요청 call / 실패: 알럿
-    */
-    $("#regSubmitBtn").on("click",function(){
-        var member = new Member();
-        member.setMember();
-        var validCheck = member.isValid();
-        if(validCheck!="valid"){
-            alert(validCheck);
-        } else {
-            $.ajax({
-                url: 'restcontroller/RegisterController.php'
-                ,type: 'POST'
-                ,data: {
-                    'action': "newMember"
-                    ,'member' : member
-                }
-                ,dataType: 'json'
-                ,success: function(parsedResult){
-                    if(parsedResult.result=="valid_fail" || parsedResult.result=="duplicatedId"){
-                        alert(parsedResult.message);
-                    } else if(parsedResult.result=="session_end"){
-                        window.history.back();
-                        alert(parsedResult.message);
-                        window.location.href="index.php?mode=step_02";
-                    } else if(parsedResult.dbResult!="success") {
-                        alert("오류가 발생했습니다.");
-                    } else {
-                        window.location.href="index.php?mode=complete";
-                    }
-                }
-            })
-        }
-    })
-
-    if(paramDetect()=="regist"){
-        window.location.href="index.php?mode=step_03"
-    }
-
-
-});
 
 class Member{
     setMember(){
@@ -195,7 +125,7 @@ class Member{
         this.pw = $("#pw").val();
         this.pwConfirm = $("#pwConfirm").val();
         this.email = emailMerger();
-        this.mobileNumber = "<?php echo $_SESSION['phoneNumber']?>";
+        this.mobileNumber = "<?php echo $_SESSION['mobileNumber']?>";
         this.telNumber = telNumberMerger();
         this.postalCode = $("#postalCode").val();
         this.address = $("#address").val();
@@ -240,23 +170,31 @@ class Member{
     }
 }
 
-function pwValidChecker(pw){
-    var regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/;
-    return regex.test(pw);
-}
-
-function idValidChecker(id){
-    var regex = /^[a-z][a-z0-9]{3,14}$/;
-    return regex.test(id);
+function idDuplicationCheckBtn(){
+    /*
+    *	id중복 체크 : id필드 null 체크 -> id중복체크function 호출 -> 중복 : idDuplicateChecked = false, 미중복 = true;
+    */
+    var id = $("#id").val();
+    if(id==""){
+        alert("중복확인을 위해 아이디를 입력해 주세요.");
+        return;
+    }
+    idDuplicationChecker(id, function(isDuplicated) {
+        if(!isDuplicated){
+            alert("사용 가능한 ID입니다.");
+            idDuplicateChecked = true;
+        } else {
+            alert("이미 사용중인 ID입니다.");
+            idDuplicateChecked = false;
+        }
+    });
 }
 
 function idDuplicationChecker(id, callback){
-
     if(!idValidChecker(id)){
         alert("아이디 형식을 확인해 주세요.");
         return;
     }
-
     $.ajax({
         url: 'restcontroller/RegisterController.php'
         ,type: 'POST'
@@ -276,6 +214,51 @@ function idDuplicationChecker(id, callback){
             callback(true);
         }
     });
+}
+
+function regSubmitBtn(){
+    /*
+    *	회원가입 버튼 클릭 -> 유효성 검사 -> valid: 서버 가입요청 call / 실패: 알럿
+    */
+    var member = new Member();
+    member.setMember();
+    var validCheck = member.isValid();
+    if(validCheck!="valid"){
+        alert(validCheck);
+    } else {
+        $.ajax({
+            url: 'restcontroller/RegisterController.php'
+            ,type: 'POST'
+            ,data: {
+                'action': "newMember"
+                ,'member' : member
+            }
+            ,dataType: 'json'
+            ,success: function(parsedResult){
+                console.log(parsedResult);
+                if(parsedResult.result=="valid_fail" || parsedResult.result=="duplicatedId"){
+                    alert(parsedResult.message);
+                } else if(parsedResult.result=="duplicatedMobileNumber" || parsedResult.result=="session_end"){
+                    alert(parsedResult.message);
+                    window.location.href="index.php?mode=step_02";
+                } else if(parsedResult.dbResult!="success") {
+                    alert("오류가 발생했습니다.");
+                } else {
+                    window.location.href="index.php?mode=complete";
+                }
+            }
+        })
+    }
+}
+
+function pwValidChecker(pw){
+    var regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/;
+    return regex.test(pw);
+}
+
+function idValidChecker(id){
+    var regex = /^[a-z][a-z0-9]{3,14}$/;
+    return regex.test(id);
 }
 
 function emailDomainSplit(){
@@ -305,14 +288,14 @@ function emailMerger(){
     }
 }
 
-function phoneNumberFiller(mobileNumber){
-    var numArr = phoneNumberSlicer(mobileNumber)
+function mobileNumberFiller(mobileNumber){
+    var numArr = mobileNumberSlicer(mobileNumber)
     $("#mobileNumberBegin").val(numArr[0]);
     $("#mobileNumberCenter").val(numArr[1]);
     $("#mobileNumberLast").val(numArr[2]);
 }
 
-function phoneNumberSlicer(mobileNumber){
+function mobileNumberSlicer(mobileNumber){
     if(mobileNumber.length!=11){
         alert("오류가 발생했어요. 다시 시도해 주세요.");
         window.history.back();
@@ -330,14 +313,6 @@ function telNumberMerger(){
     }
 }
 
-function hoverEffect(element) {
-    element.style.cursor = 'pointer';
-}
-
-function normalCursor(element) {
-    element.style.cursor = 'default';
-}
-
 function paramDetect(){
     var param = $(location).attr('search');
     if(param.includes('mode=')) {
@@ -345,7 +320,22 @@ function paramDetect(){
         return modeValue;
     }
 }
+
+$(document).ready(function(){
+    mobileNumberFiller("<?php echo $_SESSION["mobileNumber"]?>");
+    emailDomainSplit();
+    emailDomainSelector();
+
+    $("#id").on("change",function(){
+        idDuplicateChecked = false;
+    });
+
+    if(paramDetect()=="regist"){
+        window.location.href="index.php?mode=step_03"
+    }
+});
 </script>
+
 
 <!-- <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script> -->
 

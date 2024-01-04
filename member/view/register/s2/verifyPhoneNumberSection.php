@@ -1,3 +1,9 @@
+<?php 
+        require_once $_SERVER["DOCUMENT_ROOT"].'/member/service/sessionService.php';
+        $sessionService = new SessionService();
+        $sessionService->resetSession();
+?>
+
 <div id="container" class="container-full">
     <div id="content" class="content">
         <div class="inner">
@@ -15,11 +21,11 @@
 						<input id="mobileNumberBegin" type="text" maxlength="3" class="input-text numberInput" style="width:50px"> - 
 						<input id="mobileNumberCenter" type="text" maxlength="4" class="input-text numberInput" style="width:50px"> - 
 						<input id="mobileNumberLast" type="text" maxlength="4" class="input-text numberInput" style="width:50px">
-						<a id="sendCode" href="#" class="btn-s-line">인증번호 받기</a>
+						<a id="sendCode" href="javascript:sendCode()" class="btn-s-line">인증번호 받기</a>
 
 						<br><br>
 						<input id="phoneCode" type="text" class="input-text" style="width:200px">
-						<a id="verifyBtn" href="#" class="btn-s-line">인증번호 확인</a>
+						<a id="verifyBtn" href="javascript:verifyMyCode()" class="btn-s-line">인증번호 확인</a>
 					</div>
 					<i class="graphic-phon"><span>휴대폰 인증</span></i>
 				</div>
@@ -30,73 +36,80 @@
 </div>
 
 <script>
-    $(document).ready(function(){
+    var isCodeSent = false;
 
-        var isCodeSent = false;
-
-        $("#sendCode").click(function(){
-            var mobileNumber = $("#mobileNumberBegin").val()+$("#mobileNumberCenter").val()+$("#mobileNumberLast").val();
-            if(validateMobileNumber(mobileNumber)){
-                $.ajax({
-                    url: 'restcontroller/RegisterController.php'
-                    ,type: 'POST'
-                    ,data: {
-                        'action': "generateCode"
-                        ,'mobileNumber' : mobileNumber
-                    }
-                    ,success: function(result){
-                        alert("인증번호가 발송되었습니다.");
-                        isCodeSent = true;
-                    }
-                    ,error: function(result){
-                        alert("인증번호 발송에 실패했습니다.");
-                    }
-                });
-            };
-        })
-
-        $("#verifyBtn").click(function(){
-            var inputCode = $("#phoneCode").val();
-            var verifyResult = false;
-
-            if(!isCodeSent){
-                alert("인증번호 받기를 눌러주세요");
-                return;
-            } 
-
+    function sendCode(){
+        var mobileNumber = $("#mobileNumberBegin").val()+$("#mobileNumberCenter").val()+$("#mobileNumberLast").val();
+        if(validateMobileNumber(mobileNumber)){
             $.ajax({
                 url: 'restcontroller/RegisterController.php'
                 ,type: 'POST'
                 ,data: {
-                    'action': "verifyCode"
-                    ,'inputCode' : inputCode
+                    'action': "generateCode"
+                    ,'mobileNumber' : mobileNumber
                 }
-                ,success: function(result){
-                    if(result=="true"){
-                        alert("인증에 성공했어요.");
-                        window.location.href='index.php?mode=step_03';
-                    } else{
-                        alert("인증코드를 다시 확인해주세요.");
+                ,dataType:"json"
+                ,success: function(response){
+                    if(response.result=="success"){
+                        alert("인증번호가 발송되었습니다.");
+                        isCodeSent = true;
+                    } else {
+                        alert("이미 사용중인 휴대폰번호 입니다.");
+                        isCodeSent = false;
                     }
                 }
                 ,error: function(){
-                    alert("인증에 실패했습니다.")
+                    alert("인증번호 발송에 실패했습니다.");
                 }
-            })
-        })
+            });
+        };
+    }
 
-        $(".numberInput").keyup(function(){
-            if(isNaN($(this).val())){
-                var tmpNumber = $(this).val();
-                $(this).val(tmpNumber.slice(0,-1));
+    function verifyMyCode(){
+        var inputCode = $("#phoneCode").val();
+        var verifyResult = false;
+
+        if(!isCodeSent){
+            alert("인증번호 받기를 눌러주세요");
+            return;
+        } 
+
+        $.ajax({
+            url: 'restcontroller/RegisterController.php'
+            ,type: 'POST'
+            ,data: {
+                'action': "verifyCode"
+                ,'inputCode' : inputCode
+                ,'type': "phone"
+                ,'numberOrMail' : $("#mobileNumberBegin").val()+$("#mobileNumberCenter").val()+$("#mobileNumberLast").val()
+            }
+            ,dataType:"json"
+            ,success: function(result){
+                if(result.result=="success"){
+                    alert("인증에 성공했어요.");
+                    window.location.href='index.php?mode=step_03';
+                } else{
+                    alert("인증코드를 다시 확인해주세요.");
+                }
+            }
+            ,error: function(){
+                alert("인증에 실패했습니다.")
             }
         })
-
-
-    });
+    }
 
     function validateMobileNumber(number){
         var regex = /^[0-9]{11}/;
         return regex.test(number);
     }
+
+    $(document).ready(function(){
+        $(".numberInput").keyup(function(){
+            if(isNaN($(this).val())){
+                var tmpNumber = $(this).val();
+                $(this).val(tmpNumber.slice(0,-1));
+            };
+            isCodeSent = false;
+        })
+    });
 </script>

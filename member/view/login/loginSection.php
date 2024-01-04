@@ -23,7 +23,7 @@
 			
 			<div class="box-btn">
 				<a href="/member/index.php?mode=step_01" class="btn-m-gray">회원가입</a>
-				<a href="#" class="btn-m-gray">ID/PW 찾기</a>
+				<a href="/member/index.php?mode=find_id" class="btn-m-gray">ID/PW 찾기</a>
 			</div>
 		</div>
 		<div class="login-guide">
