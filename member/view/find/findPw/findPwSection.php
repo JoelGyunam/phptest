@@ -86,7 +86,7 @@
     }
 
     function verifyMyCode(){
-        var myCode = $("#inputCode").val();
+        var myCode = $("#inputCode").val().trim();
         var type = $(".methodSelect:checked").val();
         if(!sent){
             alert("인증번호 받기를 눌러주세요.");
@@ -135,7 +135,7 @@
             alert("휴대폰 번호를 입력해 주세요.");
             return;
         }
-        if($("#email").val()=="" && pwFinderInfo.method=="email"){
+        if($("#email").val().trim()=="" && pwFinderInfo.method=="email"){
             alert("이메일주소를 입력해 주세요.");
             return;
         }
@@ -168,7 +168,7 @@
 
     function emailDomainSplit(){
         $("#email").on("change",function(){
-            var email = $(this).val();
+            var email = $(this).val().trim();
             if(email.includes("@")){
                 var partsArr = email.split("@");
                 $(this).val(partsArr[0]);
@@ -188,15 +188,15 @@
     }
 
     function emailMerger(){
-        if($("#email").val()!="" && $("#emailDomain").val()!=""){
-            return $("#email").val()+"@"+$("#emailDomain").val();
+        if($("#email").val().trim()!="" && $("#emailDomain").val().trim()!=""){
+            return $("#email").val().trim()+"@"+$("#emailDomain").val().trim();
         }
     }
 
     class PwFinderInfo {
         setPwFinder(method){
-            this.name = $("#name").val();
-            this.id = $("#id").val();
+            this.name = $("#name").val().trim();
+            this.id = $("#id").val().trim();
             this.method = method;
             if(this.method == "phone"){
                 this.number = telNumberMerger();

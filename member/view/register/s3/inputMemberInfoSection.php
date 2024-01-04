@@ -119,17 +119,17 @@ var idDuplicateChecked = false;
 
 class Member{
     setMember(){
-        this.name = $("#name").val();
-        this.id = $("#id").val();
+        this.name = $("#name").val().trim();
+        this.id = $("#id").val().trim();
         this.idDuplicateChecked = idDuplicateChecked;
-        this.pw = $("#pw").val();
-        this.pwConfirm = $("#pwConfirm").val();
+        this.pw = $("#pw").val().trim();
+        this.pwConfirm = $("#pwConfirm").val().trim();
         this.email = emailMerger();
         this.mobileNumber = "<?php echo $_SESSION['mobileNumber']?>";
         this.telNumber = telNumberMerger();
-        this.postalCode = $("#postalCode").val();
-        this.address = $("#address").val();
-        this.additionalAddress = $("#additionalAddress").val();
+        this.postalCode = $("#postalCode").val().trim();
+        this.address = $("#address").val().trim();
+        this.additionalAddress = $("#additionalAddress").val().trim();
         this.smsAgreed = $("#smsAgreed").is(":checked");
         this.mailAgreed = $("#mailAgreed").is(":checked");
     }
@@ -174,7 +174,7 @@ function idDuplicationCheckBtn(){
     /*
     *	id중복 체크 : id필드 null 체크 -> id중복체크function 호출 -> 중복 : idDuplicateChecked = false, 미중복 = true;
     */
-    var id = $("#id").val();
+    var id = $("#id").val().trim();
     if(id==""){
         alert("중복확인을 위해 아이디를 입력해 주세요.");
         return;
@@ -263,7 +263,7 @@ function idValidChecker(id){
 
 function emailDomainSplit(){
     $("#email").on("change",function(){
-        var email = $(this).val();
+        var email = $(this).val().trim();
         if(email.includes("@")){
             var partsArr = email.split("@");
             $(this).val(partsArr[0]);
@@ -337,7 +337,7 @@ $(document).ready(function(){
 </script>
 
 
-<!-- <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script> -->
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
 <script>
     function execDaumPostcode() {

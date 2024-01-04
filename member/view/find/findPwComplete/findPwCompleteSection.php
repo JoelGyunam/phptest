@@ -83,8 +83,8 @@ class newPassword{
     setPassword(){
         this.uid = <?php echo $_SESSION['findUid'];?>;
         this.id = "<?php echo $_SESSION['id'];?>";
-        this.pw = $("#pw").val();
-        this.pwConfirm = $("#pwConfirm").val();
+        this.pw = $("#pw").val().trim();
+        this.pwConfirm = $("#pwConfirm").val().trim();
         this.isValid = false;
 
         if(this.uid==""||this.id==""){

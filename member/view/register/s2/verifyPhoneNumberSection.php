@@ -66,7 +66,7 @@
     }
 
     function verifyMyCode(){
-        var inputCode = $("#phoneCode").val();
+        var inputCode = $("#phoneCode").val().trim();
         var verifyResult = false;
 
         if(!isCodeSent){
@@ -105,8 +105,8 @@
 
     $(document).ready(function(){
         $(".numberInput").keyup(function(){
-            if(isNaN($(this).val())){
-                var tmpNumber = $(this).val();
+            if(isNaN($(this).val().trim())){
+                var tmpNumber = $(this).val().trim();
                 $(this).val(tmpNumber.slice(0,-1));
             };
             isCodeSent = false;

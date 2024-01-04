@@ -130,7 +130,7 @@
             alert("휴대폰 번호를 입력해 주세요.");
             return;
         }
-        if($("#email").val()=="" && idFinderInfo.method=="email"){
+        if($("#email").val().trim()=="" && idFinderInfo.method=="email"){
             alert("이메일주소를 입력해 주세요.");
             return;
         }
@@ -163,7 +163,7 @@
 
     function emailDomainSplit(){
         $("#email").on("change",function(){
-            var email = $(this).val();
+            var email = $(this).val().trim();
             if(email.includes("@")){
                 var partsArr = email.split("@");
                 $(this).val(partsArr[0]);
@@ -190,7 +190,7 @@
 
     class IdFinderInfo {
         setIdFinder(method){
-            this.name = $("#name").val();
+            this.name = $("#name").val().trim();
             this.method = method;
             if(this.method == "phone"){
                 this.number = mobileNumberMerger();

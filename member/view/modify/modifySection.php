@@ -173,19 +173,19 @@ $(document).ready(function(){
 class Member{
     setMember(){
         this.uid = <?php echo $_SESSION['uid']?>;
-        this.name = $("#name").val();
-        this.id = $("#id").val();
+        this.name = $("#name").val().trim();
+        this.id = $("#id").val().trim();
         this.isIdChanged = isIdChanged;
         this.idDuplicateChecked = idDuplicateChecked;
-        this.pw = $("#pw").val();
-        this.pwConfirm = $("#pwConfirm").val();
+        this.pw = $("#pw").val().trim();
+        this.pwConfirm = $("#pwConfirm").val().trim();
         this.email = emailMerger();
         this.mobileNumber = $("#mobileNumber").text().replace(/-/g, "").trim();
         console.log(this.mobileNumber);
         this.telNumber = telNumberMerger();
-        this.postalCode = $("#postalCode").val();
-        this.address = $("#address").val();
-        this.additionalAddress = $("#additionalAddress").val();
+        this.postalCode = $("#postalCode").val().trim();
+        this.address = $("#address").val().trim();
+        this.additionalAddress = $("#additionalAddress").val().trim();
         this.smsAgreed = $("#smsAgreed").is(":checked") ? 1 : 0;
         this.mailAgreed = $("#mailAgreed").is(":checked") ? 1: 0;
     }
@@ -277,7 +277,7 @@ function editSubmit(){
 
 function idDuplicationChecker(){
 
-	var id = $("#id").val();
+	var id = $("#id").val().trim();
     if(!idValidChecker(id)){
         alert("아이디 형식을 확인해 주세요.");
         return;
@@ -316,7 +316,7 @@ function idListener(){
 
 function emailDomainSpliter(){
     $("#email").on("change",function(){
-        var email = $(this).val();
+        var email = $(this).val().trim();
         if(email.includes("@")){
             var partsArr = email.split("@");
             $(this).val(partsArr[0]);

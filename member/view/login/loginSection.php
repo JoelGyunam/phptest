@@ -95,8 +95,8 @@
 
 	class LoginInfo {
 		setMember(){
-			this.id = $("#userId").val();
-			this.password = $("#password").val();
+			this.id = $("#userId").val().trim();
+			this.password = $("#password").val().trim();
 		}
 	}
 	
