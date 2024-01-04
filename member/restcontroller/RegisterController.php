@@ -1,5 +1,7 @@
 <?php 
-
+session_start();
+// echo session_id();
+// print_r($_SESSION);
 if($_SERVER['REQUEST_METHOD']=='POST'){
     $action = $_POST['action']??'';
     switch($action){
@@ -81,6 +83,17 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 
         default :
             echo "잘못된 요청";
+            break;
+    }
+} else if($_SERVER['REQUEST_METHOD']=='GET'){
+    $action = $_GET['action']??'';
+    switch($action){
+        case 'logout' : 
+            require_once $_SERVER["DOCUMENT_ROOT"] . "/member/service/sessionService.php";
+            $sessionService = new SessionService();
+            $sessionService->logout();
+            $response = json_encode(array("goto"=>'/'));
+            echo $response;
             break;
     }
 } else if($_SERVER['REQUEST_METHOD']=='DELETE') {

@@ -1,3 +1,6 @@
+<?php session_start(); 
+// print_r($_SESSION);
+?>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="X-UA-Compatible" id="X-UA-Compatible" content="IE=EmulateIE8" />
@@ -36,6 +39,5 @@ if (strpos(__DIR__, '/home') === 0) {
     $basePath = 'c://web/frontend';
 }
 putenv("BASE_PATH=$basePath");
-
-session_start();
-?> -->
+?>-->
+ 

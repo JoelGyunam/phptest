@@ -24,7 +24,6 @@ class Member {
     function setMember($memberValue){
         require_once $_SERVER["DOCUMENT_ROOT"].'/member/service/inputMemberService.php';
         $inputMemberService = new InputMemberService();
-        session_start();
         $this->name = $memberValue["name"];
         $this->id = $memberValue["id"];
         $this->idDuplicationCheck = $inputMemberService->idDuplicateCheck($this->id);

@@ -13,6 +13,11 @@ class SessionService{
         $_SESSION['name'] = $name;
         $_SESSION['mobileNumber'] = $mobileNumber;
     }
+
+    function logout(){
+        session_destroy();
+    }
+
 }
 
 

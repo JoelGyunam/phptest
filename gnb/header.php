@@ -7,8 +7,22 @@ function go_link(action) {
 		if(confirm("로그아웃 하시겠습니까?")==false){
 			return;
 		};
-		<?php session_destroy();?>
-		window.location.href="/";
+		$.ajax({
+			url:"/member/restcontroller/RegisterController.php"
+			,type:"get"
+			,data:{
+				"action":"logout"
+			}
+			,dataType:"json"
+			,success:function(response){
+				console.log(response);
+				window.location.href=response.goto;
+			}
+			,error:function(error){
+				console.log(error);
+				alert("오류가 발생헀습니다.");
+			}
+		})
 	};
 	if(action === 'login'){
 		window.location.href="/member/login.html";

@@ -1,5 +1,4 @@
 <?php 
-session_start();
 class VerificationService{
     
     function generatePhoneCode($mobileNumber,$type){
